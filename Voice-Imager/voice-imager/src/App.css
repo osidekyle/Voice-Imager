@@ -3,3 +3,40 @@
   margin:0;
   padding:0;
 }
+
+.goButton {
+  border-color: black;
+  background:transparent;
+  border-radius: 10px;
+  color: black;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  -webkit-transition: color 300ms ease-in-out;
+  transition: color 300ms ease-in-out;
+  cursor:pointer;
+  border:solid 1px;
+}
+.goButton:after {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 0;
+  height: 100%;
+  background: black;
+  z-index: -1;
+  -webkit-transition: width 300ms ease-in-out;
+  transition: width 300ms ease-in-out;
+}
+.goButton:hover {
+  color: #fff;
+  background:transparent;
+  border:none;
+}
+.goButton:hover:after {
+  width: 110%;
+}
