@@ -40,3 +40,10 @@
 .goButton:hover:after {
   width: 110%;
 }
+
+
+
+.image{
+  position:relative;
+  
+}

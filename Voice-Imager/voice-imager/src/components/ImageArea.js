@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import bootstrap from "../../../node_modules/bootstrap/dist/css/bootstrap.css"
 import axios from "../../../node_modules/axios/dist/axios"
-
+import "../App.css"
 
 
 
@@ -9,7 +9,7 @@ const ImageArea = () => {
     const [islistening, setIsListening] =useState(false)
     const [words, setWords]=useState("");
     const [links, setLinks]=useState([]);
-
+    const imageContainer=useRef(null)
 
     const SpeechRecognition = window.speechRecognition || window.webkitSpeechRecognition;   
      let listening=false;
@@ -44,19 +44,25 @@ const ImageArea = () => {
                 }
             }
             
-            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${words}&safeSearch=false`,headers)
+            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${words}clipart&safeSearch=false`,headers)
         .then(response => {
+            let temp={}
+            temp['name']=words
+            temp["url"]=response.data.value[0].thumbnail;
+            temp["left"]=0;
+            temp["top"]=0;
+            setLinks(links=>[...links,temp])
             
-            updateLinks(response.data.value[0].thumbnail)
         })
         .catch(err => {
             console.log(err);
         });
+
+        console.log(imageContainer.childNodes)
     }
     },[words])
 
-   
-   
+    
     const parseWords=(sentence)=>{
         let finals="";
         sentence=sentence.split(" ")
@@ -70,23 +76,17 @@ const ImageArea = () => {
         setWords(finals)
         
     }
-
-    const updateLinks=(link)=>{
-        /*
-        let temp=links;
-        temp[word.slice(0,-1)]=link;
-        console.log(temp["dog"])
-        */
-        setLinks((oldArray)=>[...oldArray,link]);
+    const imageStyle={
+        positon:"relative",
+        padding:0,
+        margin:0
     }
     return ( 
-        <div className="row justify-content-center">
-            <div>
+        <React.Fragment>
                 {links.map((link)=>(
-                 <img  src={link}/>
+                 <img src={link.url} className="image" alt={link.name} id={link.name} style={{left:link["left"],top:link["top"]}}/>
                 ))}
-            </div>
-        </div>
+           </React.Fragment>
      );
 }
 
