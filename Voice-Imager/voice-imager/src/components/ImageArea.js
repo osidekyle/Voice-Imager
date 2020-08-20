@@ -40,7 +40,7 @@ const ImageArea = () => {
             const headers= {
                 "headers":{
                 "x-rapidapi-host": "contextualwebsearch-websearch-v1.p.rapidapi.com",
-                "x-rapidapi-key": "d5dedf0503mshd5df683c1996f5ap154385jsn6d5327764ac2"
+                "x-rapidapi-key": "secret"
                 }
             }
             
