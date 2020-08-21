@@ -37,7 +37,10 @@ const ImageArea = () => {
     useEffect(()=>{
         if(words!=""){
             let tempwords=words.trim().split(" ");
-            console.log(tempwords)
+            let temptemp=tempwords.slice();
+            temptemp.splice(0,1)
+            let searchwords=temptemp.join(" ");
+            console.log("name: ",searchwords)
             if(tempwords[0]=="draw"){
             const headers= {
                 "headers":{
@@ -46,11 +49,11 @@ const ImageArea = () => {
                 }
             }
             
-            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${tempwords[1]}%20clipart&safeSearch=false`,headers)
+            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${searchwords}&safeSearch=false`,headers)
         .then(response => {
             let temp={}
-            temp['name']=tempwords[1]
-            temp["url"]=response.data.value[0].thumbnail;
+            temp['name']=searchwords
+            temp["url"]=response.data.value[Math.floor(Math.random() * 10)].thumbnail;
             temp["left"]=0;
             temp["top"]=0;
             setLinks(links=>[...links,temp])
@@ -62,37 +65,45 @@ const ImageArea = () => {
     }
 
     else if(tempwords[0]=="move"){
-        console.log("got move")
+        let tempLinks=links;
+        
+        let name=tempwords.slice(1,tempwords.length-1).join(" ");
+        
         for (let i=0;i<links.length;i++){
-            if(links[i]["name"]==tempwords[1]){
-                console.log("got name")
-                if(tempwords[2]=="down"){
-                    console.log("got down")
-                   let tempLinks=links;
+            if(links[i]["name"]==name){
+                if(tempwords[tempwords.length-1]=="down"){
                    tempLinks[i]["top"]+=100;
-                   setLinks(tempLinks)
+                   break
                 }
-                if(tempwords[2]=="up"){
-                    console.log("got down")
-                   let tempLinks=links;
+                if(tempwords[tempwords.length-1]=="up"){
                    tempLinks[i]["top"]-=100;
-                   setLinks(tempLinks)
+                   break
                 }
-                if(tempwords[2]=="left"){
-                    console.log("got down")
-                   let tempLinks=links;
+                if(tempwords[tempwords.length-1]=="left"){
                    tempLinks[i]["left"]-=100;
-                   setLinks(tempLinks)
+                   break
                 }
-                if(tempwords[2]=="right"){
-                    console.log("got down")
-                   let tempLinks=links;
+                if(tempwords[tempwords.length-1]=="right"){
                    tempLinks[i]["left"]+=100;
-                   setLinks(tempLinks)
+                   break
                 }
+                setLinks(tempLinks)
             }
+            
         }
     }
+
+    else if(tempwords[0]=="delete"){
+        let templinks=links;
+        let name=tempwords.slice(1).join(" ");
+
+        for (let i=0;i<links.length;i++){
+            if(links[i]["name"]==name){
+                links.splice(i,1);
+                setLinks(links)
+        }
+    }
+}
 
     setWords("")
     }
