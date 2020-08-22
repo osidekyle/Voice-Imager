@@ -5,7 +5,7 @@ import "../App.css"
 
 
 
-const ImageArea = ({PrintToPdf, handleImage}) => {
+const ImageArea = ({ handleColor, handleImage}) => {
     const [islistening, setIsListening] =useState(false)
     const [words, setWords]=useState("");
     const [links, setLinks]=useState([]);
@@ -21,6 +21,9 @@ const ImageArea = ({PrintToPdf, handleImage}) => {
         recognition.start();
 
     };
+
+
+
 
     recognition.onresult=(event)=>{
         
@@ -42,10 +45,11 @@ const ImageArea = ({PrintToPdf, handleImage}) => {
             temptemp.splice(0,1)
             let searchwords=temptemp.join(" ");
             console.log("name: ",searchwords)
-            if(tempwords[0]=="download"){
-                PrintToPdf();
-            }
 
+           if(tempwords[1]=="background" && tempwords[2]=="color"){
+               handleColor(tempwords.slice(4).join(" "))
+               console.log("color: ",tempwords.slice(4).join(" ").trim())
+           }
             if(tempwords[0]=="draw"){
                 if(searchwords!==""){
             const headers= {
