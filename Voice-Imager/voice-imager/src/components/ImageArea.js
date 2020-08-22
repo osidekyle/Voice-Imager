@@ -5,7 +5,7 @@ import "../App.css"
 
 
 
-const ImageArea = () => {
+const ImageArea = ({handleImage}) => {
     const [islistening, setIsListening] =useState(false)
     const [words, setWords]=useState("");
     const [links, setLinks]=useState([]);
@@ -36,12 +36,14 @@ const ImageArea = () => {
 
     useEffect(()=>{
         if(words!=""){
+            
             let tempwords=words.trim().split(" ");
             let temptemp=tempwords.slice();
             temptemp.splice(0,1)
             let searchwords=temptemp.join(" ");
             console.log("name: ",searchwords)
             if(tempwords[0]=="draw"){
+                if(searchwords!==""){
             const headers= {
                 "headers":{
                 "x-rapidapi-host": "contextualwebsearch-websearch-v1.p.rapidapi.com",
@@ -49,11 +51,11 @@ const ImageArea = () => {
                 }
             }
             
-            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${searchwords}&safeSearch=false`,headers)
+            axios.get(`https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/Search/ImageSearchAPI?autoCorrect=false&pageNumber=1&pageSize=10&q=${searchwords}%20clipart&safeSearch=false`,headers)
         .then(response => {
             let temp={}
             temp['name']=searchwords
-            temp["url"]=response.data.value[Math.floor(Math.random() * 10)].thumbnail;
+            temp["url"]=response.data.value[0].thumbnail;
             temp["left"]=0;
             temp["top"]=0;
             setLinks(links=>[...links,temp])
@@ -63,7 +65,7 @@ const ImageArea = () => {
             console.log(err);
         });
     }
-
+            }
     else if(tempwords[0]=="move"){
         let tempLinks=links;
         
@@ -103,10 +105,15 @@ const ImageArea = () => {
                 setLinks(links)
         }
     }
+
 }
+    handleImage();
+        }
+    
+    
 
     setWords("")
-    }
+    
     },[words])
     
     
