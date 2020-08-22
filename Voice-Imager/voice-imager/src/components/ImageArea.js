@@ -5,7 +5,7 @@ import "../App.css"
 
 
 
-const ImageArea = ({handleImage}) => {
+const ImageArea = ({PrintToPdf, handleImage}) => {
     const [islistening, setIsListening] =useState(false)
     const [words, setWords]=useState("");
     const [links, setLinks]=useState([]);
@@ -42,6 +42,10 @@ const ImageArea = ({handleImage}) => {
             temptemp.splice(0,1)
             let searchwords=temptemp.join(" ");
             console.log("name: ",searchwords)
+            if(tempwords[0]=="download"){
+                PrintToPdf();
+            }
+
             if(tempwords[0]=="draw"){
                 if(searchwords!==""){
             const headers= {
@@ -122,7 +126,7 @@ const ImageArea = ({handleImage}) => {
         sentence=sentence.split(" ")
         for(let word of sentence)
         {
-            if(word!="a" && word!="the")
+            if(word!="a" && word!="the"  && word!="an")
             {
                 finals+=word+" "
             }

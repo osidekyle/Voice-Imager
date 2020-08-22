@@ -5,6 +5,8 @@ import ImageArea from "./components/ImageArea"
 import {bounceInDown,bounceOutUp, fadeIn, fadeOut} from 'react-animations'
 import styled, { keyframes } from 'styled-components';
 import './App.css';
+import html2canvas from "../../../node_modules/html2canvas/dist/html2canvas"
+
 
 function App() {
 
@@ -34,12 +36,26 @@ function App() {
     setGone(true)
   }
 
+  const printToPdf = () => {
+    html2canvas(document.getElementById("print_to_pdf")).then(canvas => {
+      var data = canvas.toDataURL();
+      var pdfExportSetting = {
+        content: [
+          {
+            image: data,
+            width: 500
+          }
+        ]
+      };
+      pdfMake.createPdf(pdfExportSetting).download("test_file.pdf");
+    });
+  };
   
   return (
-    <div className="App container" >
+    <div className="App container" id="print_to_pdf" >
       {rendered ? clicked ? <BounceOutUp><Header style="display:none" /></BounceOutUp> :<Bounce><Header handleClick={handleClick}/></Bounce> : null}
       {gone ? null : filled ? <FadeOut><Message/></FadeOut> : rendered ? null : <FadeIn><Message/></FadeIn>}
-      {rendered ? null : <ImageArea handleImage={handleImage}/>}
+      {rendered ? null : <ImageArea printToPdf={printToPdf} handleImage={handleImage}/>}
     </div>
   );
 }
